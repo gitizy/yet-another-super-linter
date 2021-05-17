@@ -1,0 +1,30 @@
+---
+issues:
+  include:
+    # revive: Annoying issue about not having a comment. We want comments !
+    - EXC0012
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - dupl
+        - goconst
+        - gosec
+
+linters:
+  enable:
+    - goconst
+    - gocritic
+    - gocyclo
+    - goimports
+    - gosec
+    - misspell
+    - revive
+    - unconvert
+
+linters-settings:
+  govet:
+    # report about shadowed variables
+    check-shadowing: true
+  gocyclo:
+    # minimal code complexity to report, 30 by default
+    min-complexity: 15
