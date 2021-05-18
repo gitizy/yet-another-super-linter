@@ -1,0 +1,61 @@
+---
+linters:
+  disable: []
+  enable:
+    - golangci-lint
+    - hadolint
+    - shellcheck
+    - shfmt
+
+# all available settings of specific linters
+linters-settings:
+  golangci-lint:
+    version: ['golangci-lint', '--version']
+    command: ['golangci-lint', 'run']
+    args:
+      - '--config=/opt/yasl/linters/golangci-lint.yaml'
+    workdir: "./go"
+    filters:
+      folders:
+        - ./...
+  hadolint:
+    version: ['hadolint', '--version']
+    command: ['hadolint']
+    filters:
+      git-pattern: ['**Dockerfile']
+  shellcheck:
+    version: ['shellcheck', '--version']
+    command: ['shellcheck']
+    args:
+      # Allow 'source' outside of FILES
+      - '--external-sources'
+      # Include warnings from sourced files
+      - '--check-sourced'
+      # Suggest adding a default case in `case` statements
+      - '--enable=add-default-case'
+      # Suggest explicitly using -n in `[ $var ]`
+      - '--enable=avoid-nullary-conditions'
+      # Suggest 'command -v' instead of 'which'
+      - '--enable=deprecate-which'
+      # Suggest quoting variables without metacharacters
+      - '--enable=quote-safe-variables'
+      # Suggest putting braces around all variable references
+      - '--enable=require-variable-braces'
+    filters:
+      git-pattern: ['**.sh']
+  shfmt:
+    version: ['shfmt', '--version']
+    command: ['shfmt']
+    args:
+      # switch cases will be indented
+      - -ci
+      # error with a diff when the formatting differs
+      - -d
+      # number of space for indentation
+      - -i=2
+      # simplify the code
+      - -s
+      # redirect operators will be followed by a space
+      - -sr
+    filters:
+      git-pattern: ['**.sh']

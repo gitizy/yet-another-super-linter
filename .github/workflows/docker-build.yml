@@ -1,0 +1,46 @@
+---
+name: Build pipeline
+on: [push]
+jobs:
+  Run-go-tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run:
+          go test
+            -coverpkg=code.gitizy.dev/yasl/...
+            -coverprofile=coverage.out
+            ./...
+        working-directory: ./go
+
+      - name: Display coverage percentages
+        run: go tool cover -func=coverage.out
+        working-directory: ./go
+
+      - name: Generate coverage HTML report
+        run: go tool cover -html=coverage.out -o coverage.html
+        working-directory: ./go
+
+      - name: Archive coverage HTML report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          if-no-files-found: error
+          path: go/coverage.html
+
+  Build-docker-image:
+    runs-on: ubuntu-20.04
+    needs: Run-go-tests
+    steps:
+      - name: Checkout code base
+        uses: actions/checkout@v2
+
+      - name: Build docker image
+        run:
+          docker build
+            --file docker/Dockerfile
+            --tag yasl
+            .
