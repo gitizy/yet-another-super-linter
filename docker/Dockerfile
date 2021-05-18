@@ -20,7 +20,7 @@ FROM mvdan/shfmt:v3.2.4 as shfmt
 
 FROM golang:1.15.12-alpine3.13 AS yasl
 
-COPY go /opt/yasl
+COPY . /opt/yasl
 
 WORKDIR /opt/yasl
 

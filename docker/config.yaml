@@ -14,7 +14,6 @@ linters-settings:
     command: ['golangci-lint', 'run']
     args:
       - '--config=/opt/yasl/linters/golangci-lint.yaml'
-    workdir: "./go"
     filters:
       folders:
         - ./...
