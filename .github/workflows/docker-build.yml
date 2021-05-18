@@ -28,7 +28,7 @@ jobs:
           if-no-files-found: error
           path: coverage.html
 
-  Build-docker-image:
+  Docker-image:
     runs-on: ubuntu-20.04
     needs: Run-go-tests
     steps:
@@ -39,5 +39,12 @@ jobs:
         run:
           docker build
             --file docker/Dockerfile
-            --tag yasl
+            --tag gitizy/yasl:${{ github.sha }}
             .
+
+      - name: Edit an action.yml file for test local build
+        run:
+          "sed -i 's@image:.*@image: gitizy/yasl:${{ github.sha }}@' action.yml"
+
+      - name: Test the local action
+        uses: ./
