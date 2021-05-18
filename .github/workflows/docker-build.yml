@@ -14,24 +14,21 @@ jobs:
             -coverpkg=code.gitizy.dev/yasl/...
             -coverprofile=coverage.out
             ./...
-        working-directory: ./go
 
       - name: Display coverage percentages
         run: go tool cover -func=coverage.out
-        working-directory: ./go
 
       - name: Generate coverage HTML report
         run: go tool cover -html=coverage.out -o coverage.html
-        working-directory: ./go
 
       - name: Archive coverage HTML report
         uses: actions/upload-artifact@v2
         with:
           name: coverage-report
           if-no-files-found: error
-          path: go/coverage.html
+          path: coverage.html
 
-  Build-docker-image:
+  Docker-image:
     runs-on: ubuntu-20.04
     needs: Run-go-tests
     steps:
@@ -42,5 +39,12 @@ jobs:
         run:
           docker build
             --file docker/Dockerfile
-            --tag yasl
+            --tag gitizy/yasl:${{ github.sha }}
             .
+
+      - name: Edit an action.yml file for test local build
+        run:
+          "sed -i 's@image:.*@image: gitizy/yasl:${{ github.sha }}@' action.yml"
+
+      - name: Test the local action
+        uses: ./
