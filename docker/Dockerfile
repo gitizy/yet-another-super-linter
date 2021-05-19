@@ -31,7 +31,16 @@ FROM alpine:3.13.5
 RUN set -eux; \
     apk add --no-cache \
         git=2.30.2-r0 \
-        go=1.15.12-r0
+        go=1.15.12-r0 \
+        npm=14.16.1-r1 \
+    ; \
+    npm install \
+        --global \
+        --no-audit \
+        --no-fund \
+        --no-progress \
+        --no-update-notifier \
+        dockerfilelint@1.8.0
 
 COPY --from=golangci-lint /usr/bin/golangci-lint /usr/bin/
 COPY --from=hadolint /bin/hadolint /usr/bin/hadolint

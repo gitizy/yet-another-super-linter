@@ -3,6 +3,7 @@ linters:
   disable: []
   enable:
     - bashexec
+    - dockerfilelint
     - golangci-lint
     - hadolint
     - shellcheck
@@ -14,6 +15,11 @@ linters-settings:
     command: ['bashexec.sh']
     filters:
       git-pattern: ['**.sh']
+  dockerfilelint:
+    version: ['dockerfilelint', '--version']
+    command: ['dockerfilelint']
+    filters:
+      git-pattern: ['**Dockerfile']
   golangci-lint:
     version: ['golangci-lint', '--version']
     command: ['golangci-lint', 'run']
