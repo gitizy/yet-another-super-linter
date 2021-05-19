@@ -40,7 +40,8 @@ RUN set -eux; \
         --no-fund \
         --no-progress \
         --no-update-notifier \
-        dockerfilelint@1.8.0
+        dockerfilelint@1.8.0 \
+        markdownlint-cli@0.27.1
 
 COPY --from=golangci-lint /usr/bin/golangci-lint /usr/bin/
 COPY --from=hadolint /bin/hadolint /usr/bin/hadolint

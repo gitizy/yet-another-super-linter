@@ -6,6 +6,7 @@ linters:
     - dockerfilelint
     - golangci-lint
     - hadolint
+    - markdownlint
     - shellcheck
     - shfmt
 
@@ -33,6 +34,13 @@ linters-settings:
     command: ['hadolint']
     filters:
       git-pattern: ['**Dockerfile']
+  markdownlint:
+    version: ['markdownlint', '--version']
+    command: ['markdownlint']
+    args:
+      - --config=/opt/yasl/linters/markdownlint.yaml
+    filters:
+      git-pattern: ['**.md']
   shellcheck:
     version: ['shellcheck', '--version']
     command: ['shellcheck']
