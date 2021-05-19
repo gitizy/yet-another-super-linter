@@ -2,13 +2,28 @@
 linters:
   disable: []
   enable:
+    - bashexec
+    - dockerfilelint
     - golangci-lint
     - hadolint
+    - jscpd
+    - jsonlint
+    - markdownlint
     - shellcheck
     - shfmt
+    - yamllint
 
 # all available settings of specific linters
 linters-settings:
+  bashexec:
+    command: ['bashexec.sh']
+    filters:
+      git-pattern: ['**.sh']
+  dockerfilelint:
+    version: ['dockerfilelint', '--version']
+    command: ['dockerfilelint']
+    filters:
+      git-pattern: ['**Dockerfile']
   golangci-lint:
     version: ['golangci-lint', '--version']
     command: ['golangci-lint', 'run']
@@ -22,6 +37,25 @@ linters-settings:
     command: ['hadolint']
     filters:
       git-pattern: ['**Dockerfile']
+  jscpd:
+    version: ['jscpd', '--version']
+    args:
+      - --config=/opt/yasl/linters/jscpd.json
+    command: ['jscpd']
+    filters:
+      git-pattern: ['**']
+  jsonlint:
+    version: ['jsonlint', '--version']
+    command: ['jsonlint']
+    filters:
+      git-pattern: ['**.json']
+  markdownlint:
+    version: ['markdownlint', '--version']
+    command: ['markdownlint']
+    args:
+      - --config=/opt/yasl/linters/markdownlint.yaml
+    filters:
+      git-pattern: ['**.md']
   shellcheck:
     version: ['shellcheck', '--version']
     command: ['shellcheck']
@@ -58,3 +92,11 @@ linters-settings:
       - -sr
     filters:
       git-pattern: ['**.sh']
+  yamllint:
+    version: ['yamllint', '--version']
+    command: ['yamllint']
+    args:
+      - --strict
+      - --config-file=/opt/yasl/linters/yamllint.yaml
+    filters:
+      git-pattern: ['**.yaml', '**.yml']
