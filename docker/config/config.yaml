@@ -11,6 +11,7 @@ linters:
     - markdownlint
     - shellcheck
     - shfmt
+    - yamllint
 
 # all available settings of specific linters
 linters-settings:
@@ -91,3 +92,11 @@ linters-settings:
       - -sr
     filters:
       git-pattern: ['**.sh']
+  yamllint:
+    version: ['yamllint', '--version']
+    command: ['yamllint']
+    args:
+      - --strict
+      - --config-file=/opt/yasl/linters/yamllint.yaml
+    filters:
+      git-pattern: ['**.yaml', '**.yml']

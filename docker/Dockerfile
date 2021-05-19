@@ -33,6 +33,8 @@ RUN set -eux; \
         git=2.30.2-r0 \
         go=1.15.12-r0 \
         npm=14.16.1-r1 \
+        py3-pip=20.3.4-r0 \
+        python3=3.8.10-r0 \
     ; \
     npm install \
         --global \
@@ -43,7 +45,12 @@ RUN set -eux; \
         dockerfilelint@1.8.0 \
         jscpd@3.3.25 \
         jsonlint@1.6.3 \
-        markdownlint-cli@0.27.1
+        markdownlint-cli@0.27.1 \
+    ; \
+    pip install \
+        --no-cache-dir \
+        yamllint==1.26.1 \
+    ;
 
 COPY --from=golangci-lint /usr/bin/golangci-lint /usr/bin/
 COPY --from=hadolint /bin/hadolint /usr/bin/hadolint
