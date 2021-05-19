@@ -6,6 +6,7 @@ linters:
     - dockerfilelint
     - golangci-lint
     - hadolint
+    - jscpd
     - markdownlint
     - shellcheck
     - shfmt
@@ -34,6 +35,13 @@ linters-settings:
     command: ['hadolint']
     filters:
       git-pattern: ['**Dockerfile']
+  jscpd:
+    version: ['jscpd', '--version']
+    args:
+      - --config=/opt/yasl/linters/jscpd.json
+    command: ['jscpd']
+    filters:
+      git-pattern: ['**']
   markdownlint:
     version: ['markdownlint', '--version']
     command: ['markdownlint']
