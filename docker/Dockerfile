@@ -39,7 +39,7 @@ COPY --from=shellcheck /bin/shellcheck /usr/bin/
 COPY --from=shfmt /bin/shfmt /usr/bin/
 
 COPY --from=yasl /opt/yasl/yasl /usr/local/bin/
-COPY docker/config.yaml /opt/yasl/
-COPY docker/linters /opt/yasl/linters
+COPY docker/config /opt/yasl/
+COPY docker/bin /usr/local/bin/
 
 CMD ["yasl", "lint"]
