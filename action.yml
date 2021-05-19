@@ -1,7 +1,8 @@
 ---
 name: Yet-Another-Super-Linter
 author: Laurent VERDOÏA
-description: "It's an alternative of github/superlinter which can be easily used and fully configurable."
+description:
+  It's an alternative of github/superlinter which can be easily used and fully configurable.
 runs:
   using: docker
   image: ./docker/Dockerfile
