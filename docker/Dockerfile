@@ -42,6 +42,7 @@ RUN set -eux; \
         --no-update-notifier \
         dockerfilelint@1.8.0 \
         jscpd@3.3.25 \
+        jsonlint@1.6.3 \
         markdownlint-cli@0.27.1
 
 COPY --from=golangci-lint /usr/bin/golangci-lint /usr/bin/
