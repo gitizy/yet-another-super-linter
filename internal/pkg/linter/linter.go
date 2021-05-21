@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"sort"
 
 	"code.gitizy.dev/yasl/internal/pkg/config"
 	"code.gitizy.dev/yasl/internal/pkg/utils"
@@ -140,6 +141,8 @@ func (l *linter) listFiles() ([]string, error) {
 		return nil, err
 	}
 	result = append(result, findFiles...)
+
+	sort.Strings(result)
 
 	return result, nil
 }

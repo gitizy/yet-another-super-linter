@@ -18,6 +18,7 @@ package lint
 import (
 	"fmt"
 	"io/ioutil"
+	"sort"
 
 	"code.gitizy.dev/yasl/internal/pkg/config"
 	"code.gitizy.dev/yasl/internal/pkg/linter"
@@ -45,9 +46,16 @@ func loadLinters(cfgFile string) ([]linter.Linter, error) {
 		return nil, err
 	}
 
+	var names []string
+	for name := range cfg.EnabledLinters() {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+
+	enabled := cfg.EnabledLinters()
 	var linters []linter.Linter
-	for name, linterConfig := range cfg.EnabledLinters() {
-		linters = append(linters, linter.New(name, linterConfig))
+	for _, name := range names {
+		linters = append(linters, linter.New(name, enabled[name]))
 	}
 
 	return linters, nil
