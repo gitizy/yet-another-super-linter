@@ -17,10 +17,20 @@ package config
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 )
+
+// An LoadingError describes a file which cannot be read.
+type LoadingError struct {
+	Err error
+}
+
+func (e *LoadingError) Error() string {
+	return fmt.Sprintf("config: %s", e.Err)
+}
 
 // An InvalidYamlError describes a not well YAML formated invalid input passed to Unmarshal.
 type InvalidYamlError struct {
@@ -42,9 +52,14 @@ func (e *InvalidStructureError) Error() string {
 
 // Unmarshal parse the YAML-encoded configuration file from data and stores the result in the value pointed by config.
 // If
-func Unmarshal(data []byte, config *Config) error {
+func Unmarshal(file string, config *Config) error {
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return &LoadingError{err}
+	}
+
 	raw := make(map[interface{}]interface{})
-	if err := yaml.Unmarshal(data, &raw); err != nil {
+	if err = yaml.Unmarshal(data, &raw); err != nil {
 		return &InvalidYamlError{err}
 	}
 

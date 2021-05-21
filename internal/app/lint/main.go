@@ -17,7 +17,6 @@ package lint
 
 import (
 	"fmt"
-	"io/ioutil"
 	"sort"
 
 	"code.gitizy.dev/yasl/internal/pkg/config"
@@ -36,13 +35,8 @@ func Entrypoint(cfgFile string) (succeed bool) {
 }
 
 func loadLinters(cfgFile string) ([]linter.Linter, error) {
-	raw, err := ioutil.ReadFile(cfgFile)
-	if err != nil {
-		return nil, err
-	}
-
 	var cfg config.Config
-	if err = config.Unmarshal(raw, &cfg); err != nil {
+	if err := config.Unmarshal(cfgFile, &cfg); err != nil {
 		return nil, err
 	}
 

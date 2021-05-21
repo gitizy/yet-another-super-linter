@@ -1,0 +1,21 @@
+---
+linters:
+  enable: [shellcheck, shfmt]
+linters-settings:
+  golangci-lint:
+    version: ['golangci-lint', '--version']
+    command: ['golangci-lint']
+    args:
+      - '--config=/opt/yasl/linters/golangci-lint.yaml'
+    filters:
+      folders:
+        - .
+  shellcheck:
+    version: ['shellcheck', '--version']
+    command: ['shellcheck']
+    args:
+      - '--external-sources'
+      - '--enable=quote-safe-variables'
+      - '--enable=require-variable-braces'
+    filters:
+      git-pattern: ['**.sh']

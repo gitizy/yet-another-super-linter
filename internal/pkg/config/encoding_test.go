@@ -22,30 +22,6 @@ import (
 )
 
 func TestConfig_UnmarshalConfig(t *testing.T) {
-	data := []byte(`
----
-linters:
-  enable: [shellcheck, shfmt]
-linters-settings:
-  golangci-lint:
-    version: ['golangci-lint', '--version']
-    command: ['golangci-lint']
-    args:
-      - '--config=/opt/yasl/linters/golangci-lint.yaml'
-    filters:
-      folders:
-        - .
-  shellcheck:
-    version: ['shellcheck', '--version']
-    command: ['shellcheck']
-    args:
-      - '--external-sources'
-      - '--enable=quote-safe-variables'
-      - '--enable=require-variable-braces'
-    filters:
-      git-pattern: ['**.sh']
-`)
-
 	expected := Config{
 		Linters: Linters{
 			Enable: []string{"shellcheck", "shfmt"},
@@ -77,7 +53,7 @@ linters-settings:
 	}
 
 	var c Config
-	if err := Unmarshal(data, &c); err != nil {
+	if err := Unmarshal("testdata/simple.yaml", &c); err != nil {
 		t.Fatal(err)
 	}
 
@@ -85,15 +61,22 @@ linters-settings:
 		t.Fatalf("expected: %#v, but got: %#v", expected, c)
 	}
 
+	loadingError := &LoadingError{}
+	if err := Unmarshal("/nonexistant", nil); !errors.As(err, &loadingError) {
+		t.Fatalf("Error not catched on file error: %v", err)
+	} else {
+		t.Logf("Catched bad file error: %v", err)
+	}
+
 	invalidYamlError := &InvalidYamlError{}
-	if err := Unmarshal([]byte("`"), nil); !errors.As(err, &invalidYamlError) {
+	if err := Unmarshal("testdata/bad-yaml-syntax.yaml", &c); !errors.As(err, &invalidYamlError) {
 		t.Fatalf("Error not catched on bad yaml: %v", err)
 	} else {
 		t.Logf("Catched bad yaml error: %v", err)
 	}
 
 	invalidStructureError := &InvalidStructureError{}
-	if err := Unmarshal([]byte("linters: 3"), nil); !errors.As(err, &invalidStructureError) {
+	if err := Unmarshal("testdata/malformed.yaml", nil); !errors.As(err, &invalidStructureError) {
 		t.Fatalf("Error not catched on bad structure: %v", err)
 	} else {
 		t.Logf("Catched bad structure error: %v", err)
